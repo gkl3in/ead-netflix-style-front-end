@@ -1,5 +1,6 @@
 import Head from "next/head";
 import HeaderNoAuth from "../src/components/homeNoAuth/headerNoAuth";
+import PresentationSection from "../src/components/homeNoAuth/presentationSection";
 import styles from "../styles/homeNoAuth.module.scss" 
 
 const HomeNotAuth = function () {
@@ -12,7 +13,10 @@ const HomeNotAuth = function () {
 				<meta name="description" content="Tenha acesso aos melhores conteúdos sobre programação de uma forma simples e fácil." />
       </Head>
     <main>
-      <HeaderNoAuth />
+      <div className={styles.sectionBackground}>
+        <HeaderNoAuth />
+        <PresentationSection />
+      </div>
     </main>
     </>
   );
