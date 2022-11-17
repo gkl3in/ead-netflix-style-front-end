@@ -1,10 +1,53 @@
 import Head from "next/head";
+import { useRouter } from "next/router";
+import { useEffect, useState, FormEvent } from "react";
 import { Button, Container, Form, FormGroup, Input, Label } from "reactstrap";
 import Footer from "../src/components/common/footer";
 import HeaderGeneric from "../src/components/common/headerGeneric";
+import ToastComponent from "../src/components/common/toast";
+import authService from "../src/services/authService";
 import styles from "../styles/registerLogin.module.scss";
 
 const Login = function () {
+  const router = useRouter();
+  const [toastColor, setToastColor] = useState("");
+  const [toastIsOpen, setToastIsOpen] = useState(false);
+  const [errorMessage, setToastMessage] = useState("");
+
+  const registerSucess = router.query.registred;
+  useEffect(() => {
+    if (registerSucess === "true") {
+      setToastColor("bg-success");
+      setToastIsOpen(true);
+      setTimeout(() => {
+        setToastIsOpen(false);
+      }, 1000 * 3);
+      setToastMessage("Cadatro feito com sucesso!");
+    }
+  }, [router.query]);
+
+  const handleLogin = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+    const email = formData.get("email")!.toString();
+    const password = formData.get("password")!.toString();
+    const params = { email, password };
+
+    const { status } = await authService.login(params);
+
+    if (status === 200) {
+      router.push("/home");
+    } else {
+      setToastColor("bg-danger");
+      setToastIsOpen(true);
+      setTimeout(() => {
+        setToastIsOpen(false);
+      }, 1000 * 3);
+      setToastMessage("Email ou senha incorretos!");
+    }
+  }
+
   return (
     <>
       <Head>
@@ -15,7 +58,7 @@ const Login = function () {
         <HeaderGeneric logoUrl="/" btnUrl="/register" btnContent="Quero fazer parte" />
         <Container className="py-5">
           <p className={styles.formTitle}>Bem-vindo(a) ao OneBitFlix!</p>
-          <Form className={styles.form}>
+          <Form className={styles.form} onSubmit={handleLogin}>
             <p className="text-center">
               <strong>Faça o seu login!</strong>
             </p>
@@ -45,10 +88,11 @@ const Login = function () {
                 className={styles.input}
               />
             </FormGroup>
-            <Button outline className={styles.formBtn}>
+            <Button type="submit" outline className={styles.formBtn}>
               ENTRAR
             </Button>
           </Form>
+          <ToastComponent color={toastColor} isOpen={toastIsOpen} message={errorMessage} />
         </Container>
         <Footer />
       </main>
