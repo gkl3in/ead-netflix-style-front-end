@@ -1,5 +1,6 @@
 import Head from "next/head";
 import { Button, Col, Container, Row } from "reactstrap";
+import Footer from "../src/components/common/footer";
 import HeaderAuth from "../src/components/common/headerAuth";
 import UserForm from "../src/components/profile/user";
 import styles from "../styles/profile.module.scss";
@@ -12,7 +13,9 @@ const UserInfo = function () {
         <link rel="shortcut icon" href="/favicon.svg" type="image/x-icon" />
       </Head>
       <main>
-        <HeaderAuth />
+        <div className={styles.header}>
+          <HeaderAuth />
+        </div>
         <Container calssName="py-5">
           <p className={styles.title}>Minha Conta</p>
           <Row className="pt-3 pb-5">
@@ -29,6 +32,9 @@ const UserInfo = function () {
             </Col>
           </Row>
         </Container>
+        <div className={styles.footer}>
+          <Footer />
+        </div>
       </main>
     </>
   );
