@@ -3,9 +3,11 @@ import styles from "../../../../styles/profile.module.scss";
 import { useEffect, useState, FormEvent } from "react";
 import profileService from "../../../services/profileService";
 import ToastComponent from "../../common/toast";
+import { useRouter } from "next/router";
 
 const UserForm = function () {
 
+  const router = useRouter();
   const [color, setColor] = useState("");
   const [toastIsOpen, setToastIsOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -14,6 +16,9 @@ const UserForm = function () {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [created_at, setCreated_at] = useState("");
+  const [initialEmail, setInitialEmail] = useState(email);
+  const date = new Date(created_at);
+  const month = date.toLocaleDateString("default", { month: "long" });
 
   useEffect(() => {
     profileService.fetchCurrent().then((user) => {
@@ -21,7 +26,8 @@ const UserForm = function () {
       setLastName(user.lastName);
       setPhone(user.phone);
       setEmail(user.email);
-      setCreated_at(user.created_at);
+      setInitialEmail(user.email);
+      setCreated_at(user.createdAt);
     });
   }, []);
 
@@ -41,6 +47,10 @@ const UserForm = function () {
       setErrorMessage("Informações alteradas com sucesso!");
       setColor("bg-success");
       setTimeout(() => setToastIsOpen(false), 1000 * 3);
+      if (email != initialEmail) {
+        sessionStorage.clear;
+        router.push('/');
+      }
     } else {
       setToastIsOpen(true);
       setErrorMessage("Você não pode mudar para esse email!");
@@ -60,7 +70,10 @@ const UserForm = function () {
         </div>
         <div className={styles.memberTime}>
           <img src="/profile/iconUserAccount.svg" alt="iconProfile" className={styles.memberTimeImg} />
-          <p className={styles.memberTimeText}>Membro desde <br /> 20 de Abril de 2020</p>
+          <p className={styles.memberTimeText}>
+            Membro desde <br />
+            {`${date.getDate()} de ${month} de ${date.getFullYear()}`}
+          </p>
         </div>
         <hr />
         <div className={styles.inputFlexDiv}>
