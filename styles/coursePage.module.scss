@@ -69,3 +69,45 @@
   color: $lightGray;
   margin-bottom: 40px;
 }
+
+@media (max-width: 767px) {
+  .courseTitle {
+    font-size: 26px;
+    width: 99%;
+  }
+
+  .courseDescription {
+    width: 95%;
+  }
+}
+
+@media (max-width: 570px) {
+  .episodeCard {
+    width: 95%;
+  }
+}
+
+@media (max-width: 400px) {
+  .episodeCard {
+    &:hover {
+      transform: scale(1.03);
+
+      .episodeTitle {
+        font-size: 20px;
+      }
+    }
+  }
+
+  .episodeOrderTime {
+    gap: 25px;
+  }
+
+  .episodeTitle {
+    font-size: 18px;
+  }
+
+  .episodeDescription {
+    word-break: break-all;
+    font-size: 14px;
+  }
+}
